@@ -13,6 +13,7 @@ const VideoButton = () => {
     const startVideo = async () => {
         try {
             stream.current = await navigator.mediaDevices.getUserMedia({ video: true });
+            console.log('Video Stream:', stream.current);
             videoRef.current.srcObject = stream.current;
             console.log('video started');
 
@@ -32,7 +33,7 @@ const VideoButton = () => {
         <div>
             <button id="video-btn" onClick={startVideo}>Start Camera</button>
             <button id="video-end-btn" onClick={endVideo}>End Camera</button>
-            <video ref={videoRef} className={styles.video}></video>
+            <video ref={videoRef} className={styles.video} autoPlay muted></video>
             {error && <div className={styles.error}>{error}</div>}
         </div>
     );
