@@ -15,7 +15,7 @@ const VideoButton = () => {
             stream.current = await navigator.mediaDevices.getUserMedia({ video: true });
             videoRef.current.srcObject = stream.current;
             console.log('video started');
-            
+
         } catch(error) {
             console.log(error);
             setError(`Error accessing camera: ${error}`);
@@ -32,7 +32,7 @@ const VideoButton = () => {
         <div>
             <button id="video-btn" onClick={startVideo}>Start Camera</button>
             <button id="video-end-btn" onClick={endVideo}>End Camera</button>
-            <video ref={videoRef}></video>
+            <video ref={videoRef} className={styles.video}></video>
             {error && <div className={styles.error}>{error}</div>}
         </div>
     );
