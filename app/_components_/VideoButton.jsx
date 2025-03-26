@@ -14,6 +14,7 @@ const VideoButton = () => {
         try {
             stream.current = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
             console.log('Video Stream:', stream.current);
+
             videoRef.current.srcObject = stream.current;
             console.log('video started');
 
@@ -30,7 +31,7 @@ const VideoButton = () => {
     };
 
     return (
-        <div>
+        <div className={styles.container}>
             <button id="video-btn" onClick={startVideo}>Start Camera</button>
             <button id="video-end-btn" onClick={endVideo}>End Camera</button>
             <video ref={videoRef} className={styles.video} autoPlay muted></video>
@@ -40,3 +41,6 @@ const VideoButton = () => {
 };
 
 export default VideoButton;
+
+//timer for 30 seconds
+//message of requirements of the video -> 3D object
