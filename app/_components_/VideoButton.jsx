@@ -12,7 +12,7 @@ const VideoButton = () => {
 
     const startVideo = async () => {
         try {
-            stream.current = await navigator.mediaDevices.getUserMedia({ video: true });
+            stream.current = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
             console.log('Video Stream:', stream.current);
             videoRef.current.srcObject = stream.current;
             console.log('video started');
