@@ -14,7 +14,8 @@ const VideoButton = () => {
         try {
             stream.current = await navigator.mediaDevices.getUserMedia({ video: true });
             videoRef.current.srcObject = stream.current;
-
+            console.log('video started');
+            
         } catch(error) {
             console.log(error);
             setError(`Error accessing camera: ${error}`);
