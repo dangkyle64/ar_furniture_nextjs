@@ -14,6 +14,16 @@ const VideoButton = () => {
         }
     }, [error]);
 
+    const handleRecordingStart = () => {
+        startVideo();
+        startRecording();
+    };
+
+    const handleRecordingEnd = () => {
+        endVideo();
+        stopRecording();
+    };
+
     return (
         <div className={styles.container}>
             <button id="video-btn" className={styles.button} onClick={startVideo}>Start Camera</button>
@@ -22,9 +32,9 @@ const VideoButton = () => {
             {error && <div className={styles.error}>{error}</div>}
 
             {!isRecording ? (
-                <button className={styles.buttonRecord} onClick={startRecording}>Start Recording</button>
+                <button className={styles.buttonRecord} onClick={handleRecordingStart}>Start Recording</button>
             ) : (
-                <button className={styles.buttonRecordClose} onClick={stopRecording}>Stop Recording</button>
+                <button className={styles.buttonRecordClose} onClick={handleRecordingEnd}>Stop Recording</button>
             )}
             <button className={styles.buttonRecordReset} onClick={resetRecording}>Reset</button>
             {videoUrl && (
