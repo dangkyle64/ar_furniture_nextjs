@@ -9,11 +9,7 @@ const useCamera = () => {
     const startVideo = async () => {
         try {
             stream.current = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
-            console.log('Video Stream:', stream.current);
-    
             videoRef.current.srcObject = stream.current;
-            console.log('video started');
-    
         } catch(error) {
             console.log(error);
             setError(`Error accessing camera: ${error}`);
