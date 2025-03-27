@@ -22,13 +22,13 @@ const VideoButton = () => {
             {error && <div className={styles.error}>{error}</div>}
 
             {!isRecording ? (
-                <button onClick={startRecording}>Start Recording</button>
+                <button className={styles.buttonRecord} onClick={startRecording}>Start Recording</button>
             ) : (
-                <button onClick={stopRecording}>Stop Recording</button>
+                <button className={styles.buttonRecordClose} onClick={stopRecording}>Stop Recording</button>
             )}
-            <button onClick={resetRecording}>Reset</button>
+            <button className={styles.buttonRecordReset} onClick={resetRecording}>Reset</button>
             {videoUrl && (
-                <div>
+                <div className={styles.videoRecorded}>
                     <h2>Your recorded video:</h2>
                     <video controls width="400" height="300" src={videoUrl} />
                     <a href={videoUrl} download="recorded-video.webm">Download Video</a>
