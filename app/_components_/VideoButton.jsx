@@ -9,8 +9,8 @@ const VideoButton = () => {
 
     return (
         <div className={styles.container}>
-            <button id="video-btn" onClick={startVideo}>Start Camera</button>
-            <button id="video-end-btn" onClick={endVideo}>End Camera</button>
+            <button id="video-btn" className={styles.button} onClick={startVideo}>Start Camera</button>
+            <button id="video-end-btn" className ={styles.buttonClose} onClick={endVideo}>End Camera</button>
             <video ref={videoRef} className={styles.video} autoPlay muted></video>
             {error && <div className={styles.error}>{error}</div>}
         </div>
