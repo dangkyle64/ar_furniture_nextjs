@@ -14,8 +14,8 @@ const VideoButton = () => {
         }
     }, [error]);
 
-    const handleRecordingStart = () => {
-        startVideo();
+    const handleRecordingStart = async () => {
+        await startVideo();
         startRecording();
     };
 
