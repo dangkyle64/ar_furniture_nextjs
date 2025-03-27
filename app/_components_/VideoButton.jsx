@@ -1,7 +1,7 @@
 'use client';
 
-import { useRef, useState } from 'react';
 import styles from './VideoButton.module.css';
+import useCamera from '../_hooks_/useCamera';
 
 const VideoButton = () => {
 
