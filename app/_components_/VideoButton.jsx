@@ -2,10 +2,25 @@
 
 import styles from './VideoButton.module.css';
 import useCamera from '../_hooks_/useCamera';
+import useRecording from '../_hooks_/useRecording';
 
 const VideoButton = () => {
 
     const { videoRef, error, startVideo, endVideo } = useCamera();
+    const { 
+        isRecording, 
+        videoUrl, 
+        error: recordingError, 
+        startRecording, 
+        stopRecording, 
+        resetRecording 
+    } = useRecording(stream);
+
+    useEffect(() => {
+        if (cameraError) {
+            console.error(cameraError);
+        }
+    }, [cameraError]);
 
     return (
         <div className={styles.container}>
@@ -13,6 +28,21 @@ const VideoButton = () => {
             <button id="video-end-btn" className ={styles.buttonClose} onClick={endVideo}>End Camera</button>
             <video ref={videoRef} className={styles.video} autoPlay muted></video>
             {error && <div className={styles.error}>{error}</div>}
+            
+            {recordingError && <p>Error: {recordingError}</p>}
+            {!isRecording ? (
+                <button onClick={startRecording}>Start Recording</button>
+            ) : (
+                <button onClick={stopRecording}>Stop Recording</button>
+            )}
+            <button onClick={resetRecording}>Reset</button>
+            {videoUrl && (
+                <div>
+                    <h2>Your recorded video:</h2>
+                    <video controls width="400" height="300" src={videoUrl} />
+                    <a href={videoUrl} download="recorded-video.webm">Download Video</a>
+                </div>
+            )}
         </div>
     );
 };
