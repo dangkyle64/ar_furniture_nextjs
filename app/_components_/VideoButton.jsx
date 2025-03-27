@@ -3,10 +3,11 @@
 import styles from './VideoButton.module.css';
 import useCamera from '../_hooks_/useCamera';
 import useRecording from '../_hooks_/useRecording';
+import { useEffect } from 'react';
 
 const VideoButton = () => {
 
-    const { videoRef, error, startVideo, endVideo } = useCamera();
+    const { videoRef, stream, error, startVideo, endVideo } = useCamera();
     const { 
         isRecording, 
         videoUrl, 
@@ -17,10 +18,10 @@ const VideoButton = () => {
     } = useRecording(stream);
 
     useEffect(() => {
-        if (cameraError) {
-            console.error(cameraError);
+        if (error) {
+            console.error(error);
         }
-    }, [cameraError]);
+    }, [error]);
 
     return (
         <div className={styles.container}>
@@ -28,7 +29,7 @@ const VideoButton = () => {
             <button id="video-end-btn" className ={styles.buttonClose} onClick={endVideo}>End Camera</button>
             <video ref={videoRef} className={styles.video} autoPlay muted></video>
             {error && <div className={styles.error}>{error}</div>}
-            
+
             {recordingError && <p>Error: {recordingError}</p>}
             {!isRecording ? (
                 <button onClick={startRecording}>Start Recording</button>

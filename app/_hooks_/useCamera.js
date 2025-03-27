@@ -12,6 +12,7 @@ const useCamera = () => {
 
     return { 
         videoRef, 
+        stream,
         error, 
         startVideo: startVideoHandler, 
         endVideo:  () => endVideo(stream, videoRef)
