@@ -2,11 +2,12 @@
 
 import styles from './VideoButton.module.css';
 import useCamera from '../_hooks_/useCamera';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 const VideoButton = () => {
 
     const { videoRef, isRecording, videoUrl, error, startVideo, endVideo, startRecording, stopRecording, resetRecording } = useCamera();
+    const [showRecordedVideo, setShowRecordedVideo] = useState(true);
 
     useEffect(() => {
         if (error) {
@@ -24,6 +25,10 @@ const VideoButton = () => {
         stopRecording();
     };
 
+    const handleToggleRecordedVideo = () => {
+        setShowRecordedVideo(!showRecordedVideo);
+    };
+
     return (
         <div className={styles.container}>
             <video ref={videoRef} className={styles.video} autoPlay muted></video>
@@ -35,10 +40,12 @@ const VideoButton = () => {
                 <button className={styles.buttonRecordClose} onClick={handleRecordingEnd}>Stop Recording</button>
             )}
             <button className={styles.buttonRecordReset} onClick={resetRecording}>Reset</button>
-            {videoUrl && (
+
+            <button onClick={handleToggleRecordedVideo}>Toggle</button>
+
+            {videoUrl && showRecordedVideo && (
                 <div className={styles.videoRecorded}>
-                    <h2>Your recorded video:</h2>
-                    <video controls width="400" height="300" src={videoUrl} />
+                    <video controls src={videoUrl} />
                     <a href={videoUrl} download="recorded-video.webm">Download Video</a>
                 </div>
             )}

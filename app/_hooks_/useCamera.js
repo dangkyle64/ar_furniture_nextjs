@@ -1,14 +1,12 @@
 import { useRef, useState, useEffect } from 'react';
 
 const useCamera = () => {
-    const videoRef = useRef(null);
-    const stream = useRef(null);
-    
     const [error, setError] = useState(null);
-    
     const [isRecording, setIsRecording] = useState(false);
     const [videoUrl, setVideoUrl] = useState(null);
 
+    const videoRef = useRef(null);
+    const stream = useRef(null);
     const mediaRecorderRef = useRef(null);
     const recordedChunks = useRef([]);
 
@@ -85,7 +83,6 @@ export const startVideo = async (stream, setError) => {
         const mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
         stream.current = mediaStream;
     } catch(error) {
-        //console.log(error);
         setError(`Error accessing camera: ${error}`);
     };
 };
