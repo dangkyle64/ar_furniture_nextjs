@@ -1,3 +1,5 @@
+import { useRef, useState } from 'react';
+
 const useCamera = () => {
     const videoRef = useRef(null);
     const stream = useRef(null);
