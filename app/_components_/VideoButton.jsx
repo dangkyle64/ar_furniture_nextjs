@@ -2,20 +2,11 @@
 
 import styles from './VideoButton.module.css';
 import useCamera from '../_hooks_/useCamera';
-import useRecording from '../_hooks_/useRecording';
 import { useEffect } from 'react';
 
 const VideoButton = () => {
 
-    const { videoRef, stream, error, startVideo, endVideo } = useCamera();
-    const { 
-        isRecording, 
-        videoUrl, 
-        error: recordingError, 
-        startRecording, 
-        stopRecording, 
-        resetRecording 
-    } = useRecording(stream);
+    const { videoRef, isRecording, videoUrl, error, startVideo, endVideo, startRecording, stopRecording, resetRecording } = useCamera();
 
     useEffect(() => {
         if (error) {
@@ -30,7 +21,6 @@ const VideoButton = () => {
             <video ref={videoRef} className={styles.video} autoPlay muted></video>
             {error && <div className={styles.error}>{error}</div>}
 
-            {recordingError && <p>Error: {recordingError}</p>}
             {!isRecording ? (
                 <button onClick={startRecording}>Start Recording</button>
             ) : (

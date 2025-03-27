@@ -10,13 +10,14 @@ const useRecording = (stream) => {
     const videoRef = useRef(null);
 
     const startRecording = () => {
-        if (!stream) {
+        if (!stream && stream !== null) {
             setError('No stream avaliable to record');
             return;
         };
 
         try {
-            const mediaRecorder = new MediaRecorder(stream);
+            console.log(stream.current);
+            const mediaRecorder = new MediaRecorder(stream.current);
 
             mediaRecorderRef.current = mediaRecorder;
 
