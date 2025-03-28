@@ -14,6 +14,10 @@ const useCamera = () => {
         await startVideo(stream, setError); 
     };
 
+    const endVideoHandler = () => {
+        endVideo(stream, videoRef);
+    };
+
     useEffect(() => {
         if (videoRef.current && stream.current) {
             videoRef.current.srcObject = stream.current;
@@ -69,7 +73,7 @@ const useCamera = () => {
         videoUrl,
         error, 
         startVideo: startVideoHandler, 
-        endVideo:  () => endVideo(stream, videoRef),
+        endVideo: endVideoHandler,
         startRecording,
         stopRecording,
         resetRecording,
