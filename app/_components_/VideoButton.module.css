@@ -16,11 +16,11 @@
 }
 
 .videoRecorded {
-    position: absolute;
-    margin-top: 0px; 
+    margin-top: 0px;
     border: 1px solid #ccc;
-    width: 100px; 
-    height: 100px;
+    width: 100%; 
+    height: 100%;
+    object-fit: cover;
 }
 
 .buttonRecord {

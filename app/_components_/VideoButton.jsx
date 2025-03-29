@@ -8,6 +8,7 @@ const VideoButton = () => {
 
     const { videoRef, isRecording, videoUrl, error, startVideo, endVideo, startRecording, stopRecording, resetRecording } = useCamera();
     const [showRecordedVideo, setShowRecordedVideo] = useState(true);
+    const [showRecordedVideoOptions, setShowRecordedVideoOptions] = useState(false);
 
     useEffect(() => {
         if (error) {
@@ -23,10 +24,12 @@ const VideoButton = () => {
     const handleRecordingEnd = () => {
         endVideo();
         stopRecording();
+        setShowRecordedVideoOptions(true);
     };
 
     const handleToggleRecordedVideo = () => {
         setShowRecordedVideo(!showRecordedVideo);
+        setShowRecordedVideoOptions(false);
     };
 
     return (
@@ -41,14 +44,17 @@ const VideoButton = () => {
             )}
             <button className={styles.buttonRecordReset} onClick={resetRecording}>Reset</button>
 
-            <button onClick={handleToggleRecordedVideo}>Toggle</button>
-
-            {videoUrl && showRecordedVideo && (
-                <div className={styles.videoRecorded}>
-                    <video controls src={videoUrl} />
-                    <a href={videoUrl} download="recorded-video.webm">Download Video</a>
+            {showRecordedVideoOptions && (
+                <div>
+                    <button onClick={handleToggleRecordedVideo}>Toggle</button>
+                    {videoUrl && showRecordedVideo && (
+                        <div className={styles.videoRecorded}>
+                            <video controls src={videoUrl} />
+                            <a href={videoUrl} download="recorded-video.webm">Download Video</a>
+                        </div>
+                    )}
                 </div>
-            )}
+            )}            
         </div>
     );
 };
