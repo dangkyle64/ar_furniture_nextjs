@@ -4,6 +4,8 @@ import styles from './VideoButton.module.css';
 import useCamera from '../_hooks_/useCamera';
 import { useState, useEffect } from 'react';
 
+import RecordedVideoMenu from './RecordedVideoMenu/RecordedVideoMenu';
+
 const VideoButton = () => {
 
     const { videoRef, isRecording, videoUrl, error, startVideo, endVideo, startRecording, stopRecording, resetRecording } = useCamera();
@@ -53,15 +55,9 @@ const VideoButton = () => {
             )}
 
             {showRecordedVideoOptions && (
-                <div>
-                    <button onClick={handleToggleRecordedVideo}>Toggle</button>
-                    {videoUrl && showRecordedVideo && (
-                        <div className={styles.videoRecorded}>
-                            <video controls src={videoUrl} />
-                            <a href={videoUrl} download="recorded-video.webm">Download Video</a>
-                        </div>
-                    )}
-                </div>
+                <RecordedVideoMenu
+                    handleToggleRecordedVideo={handleToggleRecordedVideo}
+                />
             )}        
         </>
     );
