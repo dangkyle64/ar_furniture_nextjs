@@ -47,21 +47,21 @@ const VideoButton = () => {
                     ) : (
                         <button className={styles.buttonRecordClose} onClick={handleRecordingEnd}>Stop Recording</button>
                     )}
-                    <button className={styles.buttonRecordReset} onClick={resetRecording}>Reset</button>
-    
-                    {showRecordedVideoOptions && (
-                        <div>
-                            <button onClick={handleToggleRecordedVideo}>Toggle</button>
-                            {videoUrl && showRecordedVideo && (
-                                <div className={styles.videoRecorded}>
-                                    <video controls src={videoUrl} />
-                                    <a href={videoUrl} download="recorded-video.webm">Download Video</a>
-                                </div>
-                            )}
-                        </div>
-                    )}            
+                    <button className={styles.buttonRecordReset} onClick={resetRecording}>Reset</button>    
                 </div>
             )}
+
+            {showRecordedVideoOptions && (
+                <div>
+                    <button onClick={handleToggleRecordedVideo}>Toggle</button>
+                    {videoUrl && showRecordedVideo && (
+                        <div className={styles.videoRecorded}>
+                            <video controls src={videoUrl} />
+                            <a href={videoUrl} download="recorded-video.webm">Download Video</a>
+                        </div>
+                    )}
+                </div>
+            )}        
         </>
     );
     
