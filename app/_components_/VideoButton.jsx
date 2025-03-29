@@ -56,6 +56,7 @@ const VideoButton = () => {
 
             {showRecordedVideoOptions && (
                 <RecordedVideoMenu
+                    videoUrl={videoUrl}
                     handleToggleRecordedVideo={handleToggleRecordedVideo}
                 />
             )}        

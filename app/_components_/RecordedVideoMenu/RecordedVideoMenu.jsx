@@ -1,11 +1,10 @@
 import useCamera from "../../_hooks_/useCamera";
 import styles from "./RecordedVideoMenu.module.css";
 
-const RecordedVideoMenu = ({ handleToggleRecordedVideo }) => {
+const RecordedVideoMenu = (videoUrl, { handleToggleRecordedVideo }) => {
 
-    const { videoUrl } = useCamera();
     console.log(videoUrl);
-    
+
     return (
         <div>
             <button onClick={handleToggleRecordedVideo}>Toggle</button>
