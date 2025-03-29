@@ -27,6 +27,7 @@ const VideoButton = () => {
         stopRecording();
         setShowRecordedVideoOptions(true);
         setShowVideo(false);
+        setShowRecordedVideo(true);
     };
 
     const handleToggleRecordedVideo = () => {
