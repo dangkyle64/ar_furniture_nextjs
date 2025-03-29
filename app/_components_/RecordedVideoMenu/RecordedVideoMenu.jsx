@@ -1,7 +1,7 @@
 import useCamera from "../../_hooks_/useCamera";
 import styles from "./RecordedVideoMenu.module.css";
 
-const RecordedVideoMenu = (videoUrl, { handleToggleRecordedVideo }) => {
+const RecordedVideoMenu = ({ videoUrl, handleToggleRecordedVideo }) => {
 
     console.log(videoUrl);
 
