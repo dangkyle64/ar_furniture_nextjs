@@ -4,7 +4,8 @@ import styles from "./RecordedVideoMenu.module.css";
 const RecordedVideoMenu = ({ handleToggleRecordedVideo }) => {
 
     const { videoUrl } = useCamera();
-
+    console.log(videoUrl);
+    
     return (
         <div>
             <button onClick={handleToggleRecordedVideo}>Toggle</button>
