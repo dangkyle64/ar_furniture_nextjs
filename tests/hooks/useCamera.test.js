@@ -1,4 +1,4 @@
-import { renderHook, act, waitFor } from '@testing-library/react';
+import { renderHook, act } from '@testing-library/react';
 import { it, expect, describe, vi, beforeEach, afterEach } from 'vitest';
 import useCamera, { endVideo, startVideo } from '../../app/_hooks_/useCamera';
 
@@ -16,10 +16,16 @@ describe('useCamera hook', () => {
     it('should have initial state values', () => {
         const { result } = renderHook(() => useCamera());
 
-        expect(result.current.videoRef).toBeDefined();
         expect(result.current.error).toBeNull();
+        expect(result.current.isRecording).toBe(false);
+        expect(result.current.videoUrl).toBe(null);
+        expect(result.current.videoRef).toBeDefined();
+
         expect(typeof result.current.startVideo).toBe('function');
         expect(typeof result.current.endVideo).toBe('function');
+        expect(typeof result.current.startRecording).toBe('function');
+        expect(typeof result.current.stopRecording).toBe('function');
+        expect(typeof result.current.resetRecording).toBe('function');
     });
 
     it('should set error if getUserMedia fails', async () => {
@@ -38,12 +44,10 @@ describe('useCamera hook', () => {
 
 describe('startVideo Function', () => {
 
-    let videoRef;
     let stream;
     let setError;
 
     beforeEach(() => {
-        videoRef = { current: { srcObject: null } };
         stream = { current: null };
         setError = vi.fn();
     });
@@ -52,16 +56,15 @@ describe('startVideo Function', () => {
         const mockStream = { getTracks: vi.fn().mockReturnValue([{ stop: vi.fn() }]) };
         global.navigator.mediaDevices.getUserMedia = vi.fn().mockResolvedValue(mockStream);
 
-        await startVideo(stream, videoRef, setError);
-
-        expect(videoRef.current.srcObject).toBe(mockStream);
+        await startVideo(stream, setError);
+        expect(stream.current).toBe(mockStream);
     });
 
     it('should set error if getUserMedia fails', async () => {
         const errorMessage = 'Permission denied';
         global.navigator.mediaDevices.getUserMedia = vi.fn().mockRejectedValue(new Error(errorMessage));
 
-        await startVideo(stream, videoRef, setError);
+        await startVideo(stream, setError);
 
         expect(setError).toHaveBeenCalledWith(`Error accessing camera: Error: ${errorMessage}`);
     });

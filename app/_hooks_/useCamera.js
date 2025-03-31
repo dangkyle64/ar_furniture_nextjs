@@ -18,6 +18,10 @@ const useCamera = () => {
         endVideo(stream, videoRef);
     };
 
+    const stopRecordingHandler = () => {
+        stopRecording(mediaRecorderRef, setIsRecording)
+    };
+
     useEffect(() => {
         if (videoRef.current && stream.current) {
             videoRef.current.srcObject = stream.current;
@@ -31,7 +35,7 @@ const useCamera = () => {
         };
 
         try {
-            console.log(stream.current);
+            //console.log(stream.current);
             const mediaRecorder = new MediaRecorder(stream.current);
 
             mediaRecorderRef.current = mediaRecorder;
@@ -54,13 +58,6 @@ const useCamera = () => {
         };
     };
 
-    const stopRecording = () => {
-        if (mediaRecorderRef.current) {
-            mediaRecorderRef.current.stop();
-            setIsRecording(false);
-        };
-    };
-
     const resetRecording = () => {
         setIsRecording(false);
         setVideoUrl(null);
@@ -75,7 +72,7 @@ const useCamera = () => {
         startVideo: startVideoHandler, 
         endVideo: endVideoHandler,
         startRecording,
-        stopRecording,
+        stopRecording: stopRecordingHandler,
         resetRecording,
     };
 };
@@ -95,4 +92,11 @@ export const endVideo = async (stream, videoRef) => {
     const tracks = stream.current?.getTracks();
     tracks?.forEach((tracks) => tracks.stop());
     videoRef.current.srcObject = null;
+};
+
+export const stopRecording = (mediaRecorderRef, setIsRecording) => {
+    if (mediaRecorderRef.current) {
+        mediaRecorderRef.current.stop();
+        setIsRecording(false);
+    };
 };
