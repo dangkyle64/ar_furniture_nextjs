@@ -1,6 +1,6 @@
 import { renderHook, act } from '@testing-library/react';
 import { it, expect, describe, vi, beforeEach, afterEach } from 'vitest';
-import useCamera, { endVideo, resetRecording, startVideo, stopRecording } from '../../app/_hooks_/useCamera';
+import useCamera, { endVideo, resetRecording, startRecording, startVideo, stopRecording } from '../../app/_hooks_/useCamera';
 
 beforeEach(() => {
     global.navigator.mediaDevices = {
@@ -101,6 +101,104 @@ describe('endVideo function', () => {
         await endVideo({ current: null }, videoRef);
 
         expect(videoRef.current.srcObject).toBeNull();
+    });
+});
+
+describe('startRecording', () => {
+    let stream;
+    let mediaRecorderRef;
+    let recordedChunks;
+    let setVideoUrl;
+    let setIsRecording;
+    let setError;
+
+    beforeEach(() => {
+        stream = { current: { getTracks: vi.fn() } };
+        mediaRecorderRef = { current: null };
+        recordedChunks = { current: [] };
+        setVideoUrl = vi.fn();
+        setIsRecording = vi.fn();
+        setError = vi.fn();
+
+        global.URL.createObjectURL = vi.fn(() => 'mock-video-url');
+    });
+
+    it('should call setError when there is no stream available', () => {
+        stream.current = null;
+
+        startRecording(stream, mediaRecorderRef, recordedChunks, setVideoUrl, setIsRecording, setError);
+
+        expect(setError).toHaveBeenCalledWith('No stream avaliable to record');
+    });
+
+    it('should start the recording when stream is valid', () => {
+        stream.current = { getTracks: vi.fn() };
+
+        const mockMediaRecorder = {
+            start: vi.fn(),
+            ondataavailable: vi.fn(),
+            onstop: vi.fn(),
+        };
+        global.MediaRecorder = vi.fn(() => mockMediaRecorder);
+
+        startRecording(stream, mediaRecorderRef, recordedChunks, setVideoUrl, setIsRecording, setError);
+
+        expect(global.MediaRecorder).toHaveBeenCalledWith(stream.current); 
+        expect(mockMediaRecorder.start).toHaveBeenCalled();
+        expect(mediaRecorderRef.current).toBe(mockMediaRecorder);
+        expect(setIsRecording).toHaveBeenCalledWith(true);
+    });
+
+    it('should handle data available correctly', () => {
+        stream.current = { getTracks: vi.fn() };
+        const mockMediaRecorder = {
+            start: vi.fn(),
+            ondataavailable: null,
+            onstop: vi.fn(),
+        };
+        global.MediaRecorder = vi.fn(() => mockMediaRecorder);
+
+        startRecording(stream, mediaRecorderRef, recordedChunks, setVideoUrl, setIsRecording, setError);
+
+        const mockEvent = { data: new Blob(['mock data'], { type: 'video/webm' }) };
+        mockMediaRecorder.ondataavailable(mockEvent);
+
+        expect(recordedChunks.current).toContain(mockEvent.data);
+    });
+
+    it('should handle stop correctly and create video URL', () => {
+        stream.current = { getTracks: vi.fn() };
+        const mockMediaRecorder = {
+            start: vi.fn(),
+            ondataavailable: vi.fn(),
+            onstop: null,
+        };
+        global.MediaRecorder = vi.fn(() => mockMediaRecorder);
+
+        startRecording(stream, mediaRecorderRef, recordedChunks, setVideoUrl, setIsRecording, setError);
+
+        mockMediaRecorder.onstop = () => {
+            const blob = new Blob(recordedChunks.current, { type: 'video/webm' });
+            const videoUrl = URL.createObjectURL(blob);
+            setVideoUrl(videoUrl);
+            recordedChunks.current = [];
+        };
+
+        mockMediaRecorder.onstop();
+
+        expect(setVideoUrl).toHaveBeenCalledWith(expect.any(String));
+        expect(recordedChunks.current).toEqual([]);
+    });
+
+    it('should handle errors during recording setup', () => {
+        stream.current = { getTracks: vi.fn() };
+        global.MediaRecorder = vi.fn(() => {
+            throw new Error('MediaRecorder setup failed');
+        });
+
+        startRecording(stream, mediaRecorderRef, recordedChunks, setVideoUrl, setIsRecording, setError);
+
+        expect(setError).toHaveBeenCalledWith('Error starting the recording: Error: MediaRecorder setup failed');
     });
 });
 

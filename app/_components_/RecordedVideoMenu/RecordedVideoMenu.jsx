@@ -6,7 +6,7 @@ const RecordedVideoMenu = ({ videoUrl, handleToggleRecordedVideo, resetRecording
 
     return (
         <div className={styles.container}>
-            <button onClick={handleToggleRecordedVideo}>Toggle</button>
+            <button className={styles.buttonClose} onClick={handleToggleRecordedVideo}>Toggle</button>
             <button className={styles.buttonRecordReset} onClick={resetRecording}>Reset</button>
             {videoUrl && (
                 <div className={styles.videoRecorded}>
