@@ -10,7 +10,7 @@ const RecordedVideoMenu = ({ videoUrl, handleToggleRecordedVideo, resetRecording
             <button className={styles.buttonRecordReset} onClick={resetRecording}>Reset</button>
             {videoUrl && (
                 <div className={styles.videoRecorded}>
-                    <video controls src={videoUrl} />
+                    <video className={styles.video} controls src={videoUrl} />
                     <a href={videoUrl} download="recorded-video.webm">Download Video</a>
                 </div>
             )}
