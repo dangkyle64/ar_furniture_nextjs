@@ -1,6 +1,6 @@
 import { renderHook, act } from '@testing-library/react';
 import { it, expect, describe, vi, beforeEach, afterEach } from 'vitest';
-import useCamera, { endVideo, startVideo, stopRecording } from '../../app/_hooks_/useCamera';
+import useCamera, { endVideo, resetRecording, startVideo, stopRecording } from '../../app/_hooks_/useCamera';
 
 beforeEach(() => {
     global.navigator.mediaDevices = {
@@ -139,5 +139,54 @@ describe('stopRecording', () => {
         stopRecording(mediaRecorderRef, setIsRecording);
     
         expect(setIsRecording).toHaveBeenCalledWith(false);
+    });
+});
+
+
+describe('resetRecording', () => {
+    let setIsRecording;
+    let setVideoUrl;
+    let setError;
+
+    beforeEach(() => {
+        setIsRecording = vi.fn();
+        setVideoUrl = vi.fn();
+        setError = vi.fn();
+    });
+
+    it('should reset isRecording, videoUrl, and error state', () => {
+        resetRecording(setIsRecording, setVideoUrl, setError);
+
+        expect(setIsRecording).toHaveBeenCalledWith(false);
+        expect(setVideoUrl).toHaveBeenCalledWith(null);
+        expect(setError).toHaveBeenCalledWith(null);
+    });
+
+    it('should not call any setter more than once', () => {
+        resetRecording(setIsRecording, setVideoUrl, setError);
+
+        expect(setIsRecording).toHaveBeenCalledTimes(1);
+        expect(setVideoUrl).toHaveBeenCalledTimes(1);
+        expect(setError).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not call setters if no state has changed', () => {
+        resetRecording(setIsRecording, setVideoUrl, setError);
+    
+        expect(setIsRecording).toHaveBeenCalledTimes(1);
+        expect(setVideoUrl).toHaveBeenCalledTimes(1);
+        expect(setError).toHaveBeenCalledTimes(1);
+    });
+
+    it('should reset previously set values', () => {
+        setIsRecording(true);
+        setVideoUrl('http://somevideo.com');
+        setError('Some error occurred');
+    
+        resetRecording(setIsRecording, setVideoUrl, setError);
+    
+        expect(setIsRecording).toHaveBeenCalledWith(false);
+        expect(setVideoUrl).toHaveBeenCalledWith(null);
+        expect(setError).toHaveBeenCalledWith(null);
     });
 });

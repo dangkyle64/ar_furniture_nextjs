@@ -22,6 +22,10 @@ const useCamera = () => {
         stopRecording(mediaRecorderRef, setIsRecording)
     };
 
+    const resetRecordingHandler = () => {
+        resetRecording(setIsRecording, setVideoUrl, setError);
+    };
+
     useEffect(() => {
         if (videoRef.current && stream.current) {
             videoRef.current.srcObject = stream.current;
@@ -58,12 +62,6 @@ const useCamera = () => {
         };
     };
 
-    const resetRecording = () => {
-        setIsRecording(false);
-        setVideoUrl(null);
-        setError(null);
-    };
-
     return { 
         videoRef, 
         isRecording,
@@ -73,7 +71,7 @@ const useCamera = () => {
         endVideo: endVideoHandler,
         startRecording,
         stopRecording: stopRecordingHandler,
-        resetRecording,
+        resetRecording: resetRecordingHandler,
     };
 };
 
@@ -96,7 +94,7 @@ export const endVideo = async (stream, videoRef) => {
 
 export const stopRecording = (mediaRecorderRef, setIsRecording) => {
     try {
-        console.log('Checking mediaRecorderRef:', mediaRecorderRef.current);
+        //console.log('Checking mediaRecorderRef:', mediaRecorderRef.current);
         if (mediaRecorderRef.current && mediaRecorderRef.current !== null) {
             mediaRecorderRef.current.stop();
         };
@@ -104,4 +102,10 @@ export const stopRecording = (mediaRecorderRef, setIsRecording) => {
         console.error("Failed to stop recording", error);
     };
     setIsRecording(false);
+};
+
+export const resetRecording = (setIsRecording, setVideoUrl, setError) => {
+    setIsRecording(false);
+    setVideoUrl(null);
+    setError(null);
 };

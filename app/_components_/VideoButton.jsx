@@ -8,7 +8,18 @@ import RecordedVideoMenu from './RecordedVideoMenu/RecordedVideoMenu';
 
 const VideoButton = () => {
 
-    const { videoRef, isRecording, videoUrl, error, startVideo, endVideo, startRecording, stopRecording, resetRecording } = useCamera();
+    const { 
+        videoRef, 
+        isRecording, 
+        videoUrl, 
+        error, 
+        startVideo, 
+        endVideo, 
+        startRecording, 
+        stopRecording, 
+        resetRecording 
+    } = useCamera();
+    
     const [showRecordedVideoOptions, setShowRecordedVideoOptions] = useState(false);
     const [showVideo, setShowVideo] = useState(true);
 
