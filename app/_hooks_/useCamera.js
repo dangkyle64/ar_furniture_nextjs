@@ -19,7 +19,7 @@ const useCamera = () => {
     };
 
     const startRecordingHandler = () => {
-        startRecording(stream, mediaRecorderRef, setVideoUrl, setIsRecording, setError);
+        startRecording(stream, mediaRecorderRef, recordedChunks, setVideoUrl, setIsRecording, setError);
     };
 
     const stopRecordingHandler = () => {
@@ -66,7 +66,7 @@ export const endVideo = async (stream, videoRef) => {
     videoRef.current.srcObject = null;
 };
 
-const startRecording = (stream, mediaRecorderRef, setVideoUrl, setIsRecording, setError) => {
+const startRecording = (stream, mediaRecorderRef, recordedChunks, setVideoUrl, setIsRecording, setError) => {
     if (!stream.current && stream.current === null) {
         setError('No stream avaliable to record');
         return;
