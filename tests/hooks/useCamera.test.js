@@ -1,6 +1,6 @@
 import { renderHook, act } from '@testing-library/react';
 import { it, expect, describe, vi, beforeEach, afterEach } from 'vitest';
-import useCamera, { endVideo, startVideo } from '../../app/_hooks_/useCamera';
+import useCamera, { endVideo, startVideo, stopRecording } from '../../app/_hooks_/useCamera';
 
 beforeEach(() => {
     global.navigator.mediaDevices = {
@@ -101,5 +101,43 @@ describe('endVideo function', () => {
         await endVideo({ current: null }, videoRef);
 
         expect(videoRef.current.srcObject).toBeNull();
+    });
+});
+
+describe('stopRecording', () => {
+    let mediaRecorderRef;
+    let setIsRecording;
+
+    beforeEach(() => {
+        mediaRecorderRef = { current: { stop: vi.fn() } };
+        setIsRecording = vi.fn();
+    });
+
+    it('should stop the current mediaRecorderRef if valid', () => {
+        stopRecording(mediaRecorderRef, setIsRecording);
+
+        expect(mediaRecorderRef.current.stop).toHaveBeenCalledTimes(1);
+        expect(setIsRecording).toHaveBeenCalledWith(false);
+    });
+
+    it('should not call stop if mediaRecorderRef.current is null', () => {
+        mediaRecorderRef.current = null;
+
+        console.log('Calling stopRecording');
+        stopRecording(mediaRecorderRef, setIsRecording);
+
+        expect(mediaRecorderRef.current).toBeNull();
+        expect(setIsRecording).toHaveBeenCalledWith(false);
+    });
+
+    it('should call setIsRecording if an error occurs', () => {
+        const error = new Error('Failed to stop recording');
+        mediaRecorderRef.current.stop.mockImplementationOnce(() => {
+            throw error;
+        });
+    
+        stopRecording(mediaRecorderRef, setIsRecording);
+    
+        expect(setIsRecording).toHaveBeenCalledWith(false);
     });
 });

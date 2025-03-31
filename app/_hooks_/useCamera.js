@@ -95,8 +95,13 @@ export const endVideo = async (stream, videoRef) => {
 };
 
 export const stopRecording = (mediaRecorderRef, setIsRecording) => {
-    if (mediaRecorderRef.current) {
-        mediaRecorderRef.current.stop();
-        setIsRecording(false);
+    try {
+        console.log('Checking mediaRecorderRef:', mediaRecorderRef.current);
+        if (mediaRecorderRef.current && mediaRecorderRef.current !== null) {
+            mediaRecorderRef.current.stop();
+        };
+    } catch(error) {
+        console.error("Failed to stop recording", error);
     };
+    setIsRecording(false);
 };
