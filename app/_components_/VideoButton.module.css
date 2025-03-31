@@ -40,19 +40,6 @@
     margin-top: 100px;
 }
 
-.buttonRecordReset {
-    position: absolute;
-    z-index: 1;
-    padding: 10px 20px;
-    background-color: rgba(0,  0, 0, 0.5);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin-top: 200px;
-}
-
 .error {
     position: absolute;
     top: 120px; 

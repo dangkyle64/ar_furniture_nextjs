@@ -9,7 +9,6 @@ import RecordedVideoMenu from './RecordedVideoMenu/RecordedVideoMenu';
 const VideoButton = () => {
 
     const { videoRef, isRecording, videoUrl, error, startVideo, endVideo, startRecording, stopRecording, resetRecording } = useCamera();
-    const [showRecordedVideo, setShowRecordedVideo] = useState(true);
     const [showRecordedVideoOptions, setShowRecordedVideoOptions] = useState(false);
     const [showVideo, setShowVideo] = useState(true);
 
@@ -29,11 +28,15 @@ const VideoButton = () => {
         stopRecording();
         setShowRecordedVideoOptions(true);
         setShowVideo(false);
-        setShowRecordedVideo(true);
     };
 
+    const handleReset = () => {
+        resetRecording();
+        setShowRecordedVideoOptions(false);
+        setShowVideo(true);
+    }
+
     const handleToggleRecordedVideo = () => {
-        setShowRecordedVideo(!showRecordedVideo);
         setShowRecordedVideoOptions(false);
         setShowVideo(true);
     };
@@ -49,8 +52,7 @@ const VideoButton = () => {
                         <button className={styles.buttonRecord} onClick={handleRecordingStart}>Start Recording</button>
                     ) : (
                         <button className={styles.buttonRecordClose} onClick={handleRecordingEnd}>Stop Recording</button>
-                    )}
-                    <button className={styles.buttonRecordReset} onClick={resetRecording}>Reset</button>    
+                    )}    
                 </div>
             )}
 
@@ -58,6 +60,7 @@ const VideoButton = () => {
                 <RecordedVideoMenu
                     videoUrl={videoUrl}
                     handleToggleRecordedVideo={handleToggleRecordedVideo}
+                    resetRecording={handleReset}
                 />
             )}        
         </>
