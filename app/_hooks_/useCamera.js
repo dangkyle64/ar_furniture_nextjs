@@ -18,6 +18,10 @@ const useCamera = () => {
         endVideo(stream, videoRef);
     };
 
+    const startRecordingHandler = () => {
+        startRecording(mediaRecorderRef, setVideoUrl, setIsRecording, setError);
+    };
+
     const stopRecordingHandler = () => {
         stopRecording(mediaRecorderRef, setIsRecording)
     };
@@ -32,36 +36,6 @@ const useCamera = () => {
         }
     }, [stream.current]);
 
-    const startRecording = () => {
-        if (!stream.current && stream.current === null) {
-            setError('No stream avaliable to record');
-            return;
-        };
-
-        try {
-            //console.log(stream.current);
-            const mediaRecorder = new MediaRecorder(stream.current);
-
-            mediaRecorderRef.current = mediaRecorder;
-
-            mediaRecorder.ondataavailable = (event) => {
-                recordedChunks.current.push(event.data);
-            };
-
-            mediaRecorder.onstop = () => {
-                const blob = new Blob(recordedChunks.current, { type: 'video/webm' });
-                const videoUrl = URL.createObjectURL(blob);
-                setVideoUrl(videoUrl);
-                recordedChunks.current = [];
-            };
-
-            mediaRecorder.start();
-            setIsRecording(true);
-        } catch(error) {
-            setError(`Error starting the recording: ${error}`);
-        };
-    };
-
     return { 
         videoRef, 
         isRecording,
@@ -69,7 +43,7 @@ const useCamera = () => {
         error, 
         startVideo: startVideoHandler, 
         endVideo: endVideoHandler,
-        startRecording,
+        startRecording: startRecordingHandler,
         stopRecording: stopRecordingHandler,
         resetRecording: resetRecordingHandler,
     };
@@ -90,6 +64,36 @@ export const endVideo = async (stream, videoRef) => {
     const tracks = stream.current?.getTracks();
     tracks?.forEach((tracks) => tracks.stop());
     videoRef.current.srcObject = null;
+};
+
+const startRecording = (mediaRecorderRef, setVideoUrl, setIsRecording, setError) => {
+    if (!stream.current && stream.current === null) {
+        setError('No stream avaliable to record');
+        return;
+    };
+
+    try {
+        //console.log(stream.current);
+        const mediaRecorder = new MediaRecorder(stream.current);
+
+        mediaRecorderRef.current = mediaRecorder;
+
+        mediaRecorder.ondataavailable = (event) => {
+            recordedChunks.current.push(event.data);
+        };
+
+        mediaRecorder.onstop = () => {
+            const blob = new Blob(recordedChunks.current, { type: 'video/webm' });
+            const videoUrl = URL.createObjectURL(blob);
+            setVideoUrl(videoUrl);
+            recordedChunks.current = [];
+        };
+
+        mediaRecorder.start();
+        setIsRecording(true);
+    } catch(error) {
+        setError(`Error starting the recording: ${error}`);
+    };
 };
 
 export const stopRecording = (mediaRecorderRef, setIsRecording) => {
