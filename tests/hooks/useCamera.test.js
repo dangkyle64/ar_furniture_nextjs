@@ -1,6 +1,8 @@
 import { renderHook, act } from '@testing-library/react';
 import { it, expect, describe, vi, beforeEach, afterEach } from 'vitest';
-import useCamera, { endVideo, resetRecording, startRecording, startVideo, stopRecording } from '../../app/_hooks_/useCamera';
+import useCamera, { endVideo, resetRecording, startRecording, startVideo, stopRecording, uploadRecording } from '../../app/_hooks_/useCamera';
+
+global.fetch = vi.fn();
 
 beforeEach(() => {
     global.navigator.mediaDevices = {
@@ -286,5 +288,47 @@ describe('resetRecording', () => {
         expect(setIsRecording).toHaveBeenCalledWith(false);
         expect(setVideoUrl).toHaveBeenCalledWith(null);
         expect(setError).toHaveBeenCalledWith(null);
+    });
+});
+
+describe('uploadRecording', () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+    });
+
+    it('should upload video succesfully', async () => {
+        const mockBlob = new Blob([], { type: 'video/webm '});
+
+        fetch.mockResolvedValueOnce({
+            json: vi.fn().mockResolvedValue({ message: 'Video uploaded successfully '})
+        });
+
+        await uploadRecording(mockBlob);
+
+        expect(fetch).toHaveBeenCalledWith(
+            'https://ar-furniture-nodejs.onrender.com/api/video-upload',
+            expect.objectContaining({
+                method: 'POST',
+                body: expect.any(FormData),
+                credentials: 'include',
+            })
+        );
+    });
+
+    it('should handle error if upload fails', async () => {
+        const mockBlob = new Blob([], { type: 'video/webm' });
+    
+        fetch.mockRejectedValueOnce(new Error('Network Errdaor'));
+    
+        await uploadRecording(mockBlob);
+    
+        expect(fetch).toHaveBeenCalledWith(
+            'https://ar-furniture-nodejs.onrender.com/api/video-upload',
+            expect.objectContaining({
+                method: 'POST',
+                body: expect.any(FormData),
+                credentials: 'include',
+            })
+        );
     });
 });
