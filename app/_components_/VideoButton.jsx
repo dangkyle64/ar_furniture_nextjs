@@ -17,7 +17,8 @@ const VideoButton = () => {
         endVideo, 
         startRecording, 
         stopRecording, 
-        resetRecording 
+        resetRecording,
+        uploadRecording,
     } = useCamera();
     
     const [showRecordedVideoOptions, setShowRecordedVideoOptions] = useState(false);
@@ -72,6 +73,7 @@ const VideoButton = () => {
                     videoUrl={videoUrl}
                     handleToggleRecordedVideo={handleToggleRecordedVideo}
                     resetRecording={handleReset}
+                    uploadRecording={uploadRecording}
                 />
             )}        
         </>

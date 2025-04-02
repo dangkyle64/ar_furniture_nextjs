@@ -4,6 +4,7 @@ const useCamera = () => {
     const [error, setError] = useState(null);
     const [isRecording, setIsRecording] = useState(false);
     const [videoUrl, setVideoUrl] = useState(null);
+    const [videoBlob, setVideoBlob] = useState(null);
 
     const videoRef = useRef(null);
     const stream = useRef(null);
@@ -30,6 +31,10 @@ const useCamera = () => {
         resetRecording(setIsRecording, setVideoUrl, setError);
     };
 
+    const uploadRecordingHandler = () => {
+        uploadRecording(videoBlob)
+    };
+
     useEffect(() => {
         if (videoRef.current && stream.current) {
             videoRef.current.srcObject = stream.current;
@@ -46,6 +51,7 @@ const useCamera = () => {
         startRecording: startRecordingHandler,
         stopRecording: stopRecordingHandler,
         resetRecording: resetRecordingHandler,
+        uploadRecording: uploadRecordingHandler,
     };
 };
 
@@ -86,6 +92,7 @@ export const startRecording = (stream, mediaRecorderRef, recordedChunks, setVide
             const blob = new Blob(recordedChunks.current, { type: 'video/webm' });
             const videoUrl = URL.createObjectURL(blob);
             setVideoUrl(videoUrl);
+            setVideoBlob(blob);
             recordedChunks.current = [];
         };
 
@@ -112,4 +119,17 @@ export const resetRecording = (setIsRecording, setVideoUrl, setError) => {
     setIsRecording(false);
     setVideoUrl(null);
     setError(null);
+};
+
+export const uploadRecording = async (videoBlob) => {
+    const formData = new FormData();
+    formData.append('file', videoBlob, 'recordeed-video.webm');
+
+    await fetch('https://ar-furniture-nodejs.onrender.com/api/video-upload', {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => response.json())
+    .then(data => console.log('Video uploaded: ', data))
+    .catch(error => console.error('Error uploading video:', error));
 };

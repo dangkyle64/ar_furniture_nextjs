@@ -1,6 +1,6 @@
 import styles from "./RecordedVideoMenu.module.css";
 
-const RecordedVideoMenu = ({ videoUrl, handleToggleRecordedVideo, resetRecording }) => {
+const RecordedVideoMenu = ({ videoUrl, handleToggleRecordedVideo, resetRecording, uploadRecording }) => {
 
     //console.log(videoUrl);
 
@@ -8,6 +8,7 @@ const RecordedVideoMenu = ({ videoUrl, handleToggleRecordedVideo, resetRecording
         <div className={styles.container}>
             <button className={styles.buttonClose} onClick={handleToggleRecordedVideo}>Toggle</button>
             <button className={styles.buttonRecordReset} onClick={resetRecording}>Reset</button>
+            <button className={styles.buttonConvert} onClick={uploadRecording}>Convert to 3D Object</button>
             {videoUrl && (
                 <div className={styles.videoRecorded}>
                     <video className={styles.video} controls src={videoUrl} />
