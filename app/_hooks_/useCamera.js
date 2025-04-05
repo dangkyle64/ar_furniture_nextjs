@@ -123,6 +123,9 @@ export const resetRecording = (setIsRecording, setVideoUrl, setError) => {
 
 export const uploadRecording = async (videoBlob) => {
     const formData = new FormData();
+    
+    console.log('This works: ', videoBlob);
+
     formData.append('video', videoBlob, 'recorded-video.webm');
 
     await fetch('https://ar-furniture-nodejs.onrender.com/api/video-upload', {

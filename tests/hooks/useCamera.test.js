@@ -318,7 +318,7 @@ describe('uploadRecording', () => {
     it('should handle error if upload fails', async () => {
         const mockBlob = new Blob([], { type: 'video/webm' });
     
-        fetch.mockRejectedValueOnce(new Error('Network Errdaor'));
+        fetch.mockRejectedValueOnce(new Error('Network Error'));
     
         await uploadRecording(mockBlob);
     
